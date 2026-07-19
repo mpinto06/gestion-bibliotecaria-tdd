@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(Controller.class)
 @Import(SecurityConfig.class)
 @ActiveProfiles("test")
-class BeanValidationRequestBodyTest {
+class BeanValidationRequestBodyIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

@@ -9,7 +9,7 @@ Leyenda: 🟢 Verde (pasa, control funciona) · 🔴 Rojo (falla a propósito, d
 
 ---
 
-## 1. `SecurityConfigAccessRulesTest` — 13 ejecuciones, 9 verdes, 4 rojas
+## 1. `SecurityConfigAccessRulesIntegrationTest` — 13 ejecuciones, 9 verdes, 4 rojas
 
 `@WebMvcTest(Controller.class)` + `@Import(SecurityConfig.class)`: carga la capa web y la cadena
 real de filtros de seguridad; los 6 servicios están mockeados con `@MockitoBean` porque estas
@@ -72,7 +72,7 @@ porque en un primer intento asumí mal el código y tuve que corregirlo.
 
 ---
 
-## 2. `CsrfProtectionTest` — 2 ejecuciones, 1 verde, 1 roja
+## 2. `CsrfProtectionIntegrationTest` — 2 ejecuciones, 1 verde, 1 roja
 
 `@WebMvcTest(Controller.class)` + `@Import(SecurityConfig.class)`: misma justificación que la
 clase anterior, aquí enfocada específicamente en la presencia/ausencia del `CsrfFilter`.
@@ -88,7 +88,7 @@ clase anterior, aquí enfocada específicamente en la presencia/ausencia del `Cs
 
 ---
 
-## 3. `BeanValidationRequestBodyTest` — 12 ejecuciones, 0 verdes, 12 rojas
+## 3. `BeanValidationRequestBodyIntegrationTest` — 12 ejecuciones, 0 verdes, 12 rojas
 
 `@WebMvcTest(Controller.class)` + `@Import(SecurityConfig.class)`: `@Valid` se dispara en el
 binding de Spring MVC antes de invocar el controller, así que no hace falta persistencia. Las 12
@@ -122,7 +122,7 @@ anotaciones de Bean Validation ni el controller usa `@Valid` en ningún endpoint
 
 ---
 
-## 4. `PrivilegeEscalationEndToEndTest` — 2 ejecuciones, 1 verde, 1 roja
+## 4. `PrivilegeEscalationEndToEndIntegrationTest` — 2 ejecuciones, 1 verde, 1 roja
 
 `@SpringBootTest(webEnvironment = MOCK)` + `@AutoConfigureMockMvc`: única clase con contexto
 completo (filtros reales + `UsuarioService` real + `UsuarioRepository` real + H2 en memoria),
@@ -145,10 +145,10 @@ en aislamiento (eso ya lo prueba `UsuarioServiceTest`).
 
 | # | Defecto | Test(s) que lo documentan | Severidad | ¿Nuevo o confirma Fase 1? |
 |---|---|---|---|---|
-| 1 | Regla `DELETE /api/libros/isbn/**` inalcanzable (orden de reglas en `SecurityConfig`) | `SecurityConfigAccessRulesTest` | **Alta** | Nuevo |
-| 2 | `POST /api/login` con JSON nunca ejecuta el controller (interceptado por `formLogin`) | `SecurityConfigAccessRulesTest` | **Alta** | Nuevo |
-| 3 | `verificarAmonestacion` sin control de rol a nivel HTTP | `SecurityConfigAccessRulesTest` | **Alta** | Confirma B7 |
-| 4 | `getTodasAmonestaciones` sin control de rol a nivel HTTP | `SecurityConfigAccessRulesTest` | **Alta** | Confirma B8 |
-| 5 | CSRF deshabilitado acepta escrituras sin token | `CsrfProtectionTest` | Media | Nuevo |
-| 6 | Ausencia total de Bean Validation en 5 DTOs/entidades (`Usuario`, `Libro`, `ResenaRequest`, `ComentarioResenaRequest`, `PrestamoRequest`) | `BeanValidationRequestBodyTest` ×12 | Media | Nuevo |
-| 7 | Escalada de privilegios en registro, confirmada con persistencia real en BD | `PrivilegeEscalationEndToEndTest` | **Crítica** | Confirma A3 (end-to-end) |
+| 1 | Regla `DELETE /api/libros/isbn/**` inalcanzable (orden de reglas en `SecurityConfig`) | `SecurityConfigAccessRulesIntegrationTest` | **Alta** | Nuevo |
+| 2 | `POST /api/login` con JSON nunca ejecuta el controller (interceptado por `formLogin`) | `SecurityConfigAccessRulesIntegrationTest` | **Alta** | Nuevo |
+| 3 | `verificarAmonestacion` sin control de rol a nivel HTTP | `SecurityConfigAccessRulesIntegrationTest` | **Alta** | Confirma B7 |
+| 4 | `getTodasAmonestaciones` sin control de rol a nivel HTTP | `SecurityConfigAccessRulesIntegrationTest` | **Alta** | Confirma B8 |
+| 5 | CSRF deshabilitado acepta escrituras sin token | `CsrfProtectionIntegrationTest` | Media | Nuevo |
+| 6 | Ausencia total de Bean Validation en 5 DTOs/entidades (`Usuario`, `Libro`, `ResenaRequest`, `ComentarioResenaRequest`, `PrestamoRequest`) | `BeanValidationRequestBodyIntegrationTest` ×12 | Media | Nuevo |
+| 7 | Escalada de privilegios en registro, confirmada con persistencia real en BD | `PrivilegeEscalationEndToEndIntegrationTest` | **Crítica** | Confirma A3 (end-to-end) |

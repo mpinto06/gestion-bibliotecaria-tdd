@@ -21,10 +21,10 @@ Fecha: 2026-07-19
 
 ### Archivos de test creados
 
-- `src/test/java/com/biblioteca/integration/SecurityConfigAccessRulesTest.java`
-- `src/test/java/com/biblioteca/integration/CsrfProtectionTest.java`
-- `src/test/java/com/biblioteca/integration/BeanValidationRequestBodyTest.java`
-- `src/test/java/com/biblioteca/integration/PrivilegeEscalationEndToEndTest.java`
+- `src/test/java/com/biblioteca/integration/SecurityConfigAccessRulesIntegrationTest.java`
+- `src/test/java/com/biblioteca/integration/CsrfProtectionIntegrationTest.java`
+- `src/test/java/com/biblioteca/integration/BeanValidationRequestBodyIntegrationTest.java`
+- `src/test/java/com/biblioteca/integration/PrivilegeEscalationEndToEndIntegrationTest.java`
 
 ### Configuración agregada
 
@@ -37,7 +37,7 @@ Fecha: 2026-07-19
 
 ---
 
-## 1. `SecurityConfigAccessRulesTest` — 13 ejecuciones, 9 verdes, 4 rojas
+## 1. `SecurityConfigAccessRulesIntegrationTest` — 13 ejecuciones, 9 verdes, 4 rojas
 
 **Tipo:** `@WebMvcTest(Controller.class)` + `@Import(SecurityConfig.class)`. Solo se necesita la
 capa web + la cadena real de filtros de seguridad; los 6 servicios se mockean con
@@ -60,7 +60,7 @@ automáticamente (no es un `@Controller`/`@ControllerAdvice`).
 | `getTodasAmonestaciones_DEFECTO_rolUsuarioNoDeberiaVerTodas` | Confidencialidad | A.8.2, A.8.3 | V4.1.3 | 🔴 Rojo | **Sí (B8, confirmado a nivel HTTP)** |
 | `postLogin_conCuerpoJson_DEFECTO_nuncaInvocaAlControllerReal` | Autenticidad | A.5.17, A.8.26 | V2.2.2, V4.1.1 | 🔴 Rojo | **Sí (nuevo)** — `formLogin().loginProcessingUrl("/api/login")` intercepta cualquier POST a esa URL antes del `DispatcherServlet` y espera parámetros de formulario, no el JSON `{correo,contrasena}`; `Controller.loginUsuario` es código muerto en producción |
 
-## 2. `CsrfProtectionTest` — 2 ejecuciones, 1 verde, 1 roja
+## 2. `CsrfProtectionIntegrationTest` — 2 ejecuciones, 1 verde, 1 roja
 
 **Tipo:** `@WebMvcTest(Controller.class)` + `@Import(SecurityConfig.class)`. Mismo motivo que la
 clase anterior: solo se necesita observar si el `CsrfFilter` está presente en la cadena real.
@@ -70,7 +70,7 @@ clase anterior: solo se necesita observar si el `CsrfFilter` está presente en l
 | `postResenas_DEFECTO_sinTokenCsrfDeberiaSerRechazada` | Integridad | A.8.26 | V4.2.2 | 🔴 Rojo | **Sí** — `csrf().disable()` elimina el `CsrfFilter`; una escritura autenticada sin token se acepta, cuando la app usa autenticación por sesión/cookie (`JSESSIONID`) y debería exigirlo |
 | `postResenas_conTokenCsrfExplicito_esAceptada` | — | — | V4.2.2 | 🟢 Verde | — (control positivo/comparación) |
 
-## 3. `BeanValidationRequestBodyTest` — 12 ejecuciones, 0 verdes, 12 rojas
+## 3. `BeanValidationRequestBodyIntegrationTest` — 12 ejecuciones, 0 verdes, 12 rojas
 
 **Tipo:** `@WebMvcTest(Controller.class)` + `@Import(SecurityConfig.class)`. `@Valid` se dispara
 en el binding de Spring MVC antes de tocar el servicio; no requiere persistencia.
@@ -83,7 +83,7 @@ en el binding de Spring MVC antes de tocar el servicio; no requiere persistencia
 | `postComentariosResena_DEFECTO_aceptaPayloadInvalido` (×2: `resenaId` nulo, texto vacío) | `ComentarioResenaRequest` | Integridad | A.8.26 | V5.1.3 | 🔴 Rojo | **Sí** |
 | `postPrestar_DEFECTO_aceptaPayloadInvalido` (×2: correo vacío, ISBN nulo) | `PrestamoRequest` | Integridad | A.8.26 | V5.1.3 | 🔴 Rojo | **Sí** |
 
-## 4. `PrivilegeEscalationEndToEndTest` — 2 ejecuciones, 1 verde, 1 roja
+## 4. `PrivilegeEscalationEndToEndIntegrationTest` — 2 ejecuciones, 1 verde, 1 roja
 
 **Tipo:** `@SpringBootTest(webEnvironment = MOCK)` + `@AutoConfigureMockMvc`. Única clase de esta
 ronda con contexto completo: se necesita persistencia real (JPA + H2) para demostrar el impacto
