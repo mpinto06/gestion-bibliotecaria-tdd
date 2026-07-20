@@ -21,7 +21,14 @@ jobs:
           cache: maven
 
       - name: Ejecutar pruebas
-        run: mvn -B test
+        run: mvn -B clean test
+
+      - name: Generar reporte de cobertura JaCoCo
+        # Paso separado porque "mvn test" puede fallar por tests DEFECTO (fallos esperados);
+        # el agente JaCoCo ya escribió target/jacoco.exec durante "test" aunque el build
+        # haya fallado, así que solo procesamos ese exec sin volver a correr los tests.
+        if: always()
+        run: mvn -B jacoco:report
 
       - name: Publicar resultados JUnit
         uses: dorny/test-reporter@v2
@@ -31,6 +38,14 @@ jobs:
           path: target/surefire-reports/*.xml
           reporter: java-junit
           fail-on-error: false
+
+      - name: Subir reporte de cobertura
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: target/site/jacoco/
+          if-no-files-found: warn
 
       - name: Configurar Python
         if: always()
@@ -47,4 +62,5 @@ jobs:
           JIRA_PROJECT_KEY: ${{ vars.JIRA_PROJECT_KEY }}
           CONFLUENCE_PAGE_ID: ${{ vars.CONFLUENCE_PAGE_ID }}
           SUREFIRE_REPORTS_DIR: target/surefire-reports
+          JACOCO_REPORT_PATH: target/site/jacoco/jacoco.xml
         run: python3 scripts/publish_metrics.py
