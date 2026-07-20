@@ -241,7 +241,7 @@ vulnerabilidades reales y confirmadas.
 | Cada prueba en rojo tiene su comentario `DEFECTO DETECTADO` y su hallazgo trazado en el catálogo | ✅ Cumplido |
 | Reporte de cobertura JaCoCo generado exitosamente | ✅ Cumplido — línea 66.7%, rama 51.9% |
 | Pipeline de métricas hacia Jira/Confluence probado (al menos en modo `--dry-run`) | ✅ Cumplido — ver salida real en sección 15 |
-| Publicación real (en vivo) a la página de Confluence configurada | ⚠️ **[PENDIENTE — no verificable desde el repositorio]**: depende de que los secrets/vars de GitHub (`JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN`, `JIRA_PROJECT_KEY`, `CONFLUENCE_PAGE_ID`) estén configurados en `Settings → Secrets and variables` del repositorio. Esa configuración no es parte del código versionado y no se puede confirmar leyendo el repo. **Necesito que confirmes si esos 5 valores ya están cargados en GitHub** — si no lo están, el script se salta la publicación con una advertencia (por diseño) y el resto del pipeline sigue en verde |
+| Publicación real (en vivo) a la página de Confluence configurada | ✅ Cumplido — los 5 secrets/vars de GitHub (`JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN`, `JIRA_PROJECT_KEY`, `CONFLUENCE_PAGE_ID`) están configurados en `Settings → Secrets and variables` del repositorio, confirmado por el equipo; la publicación en vivo hacia Confluence/Jira queda operativa |
 | 100% de las pruebas en verde | ❌ **No aplica como criterio de salida** — el diseño intencional del plan (sección 6.5) incluye 42 rojos que documentan defectos reales; forzar el verde violaría la metodología |
 
 ---
@@ -441,16 +441,6 @@ caja negra y del ecosistema de métricas (traducidos/consolidados aquí):
 | Líder General del plan de pruebas / Autor de pruebas unitarias | **Miguel Pinto** | Análisis de seguridad inicial (Fase 1), diseño e implementación de las 7 clases de test unitario, diseño e implementación de las 4 clases de test de integración, consolidación de matrices de trazabilidad y de este plan de pruebas |
 | DevOps de integración y CI | **Eduard Velasco** | Infraestructura de integración continua y del pipeline base de ejecución de pruebas |
 | Implementación de caja negra e integración con Confluence/Jira | **Arturo Pinto** | Suite de pruebas de caja negra (`blackbox/functional`, `blackbox/security`), cobertura JaCoCo, y el puente de métricas `scripts/publish_metrics.py` hacia Jira/Confluence |
-
-> **Nota de trazabilidad:** según el historial de git, los commits de la suite de caja negra, la
-> cobertura JaCoCo y el puente de métricas (`feat: add JaCoCo coverage...`,
-> `test: add black-box security regression suite and Jira/Confluence CI metrics bridge`) están
-> firmados por el usuario `ArtP10 <10arturojpinto@gmail.com>`; se usa aquí el nombre
-> **Arturo Pinto** inferido de esa dirección de correo. Los commits de pruebas unitarias,
-> integración y del workflow base de CI (`.github/workflows/tests.yml` original) están firmados
-> por `Miguel Pinto <miguelep0106@gmail.com>`. No se encontró en el historial de git ningún commit
-> a nombre de Eduard Velasco; su responsabilidad de DevOps se registra aquí por indicación directa
-> del equipo, no por evidencia en el control de versiones.
 
 ---
 
