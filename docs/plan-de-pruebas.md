@@ -434,17 +434,7 @@ caja negra y del ecosistema de métricas (traducidos/consolidados aquí):
 
 ---
 
-## 14. Roles y responsabilidades
-
-| Rol | Persona | Responsabilidad |
-|---|---|---|
-| Líder General del plan de pruebas / Autor de pruebas unitarias | **Miguel Pinto** | Análisis de seguridad inicial (Fase 1), diseño e implementación de las 7 clases de test unitario, diseño e implementación de las 4 clases de test de integración, consolidación de matrices de trazabilidad y de este plan de pruebas |
-| DevOps de integración y CI | **Eduard Velasco** | Infraestructura de integración continua y del pipeline base de ejecución de pruebas |
-| Implementación de caja negra e integración con Confluence/Jira | **Arturo Pinto** | Suite de pruebas de caja negra (`blackbox/functional`, `blackbox/security`), cobertura JaCoCo, y el puente de métricas `scripts/publish_metrics.py` hacia Jira/Confluence |
-
----
-
-## 15. Resultados de la ejecución
+## 14. Resultados de la ejecución
 
 Última corrida real (`mvn clean test` + `mvn jacoco:report`, 2026-07-19):
 
