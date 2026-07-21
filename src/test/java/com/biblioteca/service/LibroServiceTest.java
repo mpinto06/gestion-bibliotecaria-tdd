@@ -197,7 +197,7 @@ class LibroServiceTest {
     void actualizarLibroPorIsbn_DEFECTO_permiteCantidadNegativa(int cantidadInvalida) {
         // Arrange
         when(usuarioRepository.findByCorreo("op@test.com")).thenReturn(Optional.of(usuarioConRol("BIBLIOTECARIO")));
-        Libro existente = libroValido(1234567890123L);
+        Libro existente = libroValido(1284);
         when(libroRepository.findByIsbn(1234567890123L)).thenReturn(Optional.of(existente));
         Libro datosNuevos = libroValido(1234567890123L);
         datosNuevos.setCantidad(cantidadInvalida);
