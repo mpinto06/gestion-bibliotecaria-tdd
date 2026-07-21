@@ -1,7 +1,7 @@
 # Informe de Auditoría de Seguridad
 ## Sistema de Gestión Bibliotecaria — Segunda Iteración
 
-**Elaborado por:** Arturo Pinto (Escriba / Auditor, según rol asignado en PAC v1.0 §2.1)
+**Elaborado por:** Arturo Pinto (Escriba / Auditor, según rol asignado en PAC v1.0, Sección 2.1)
 **Fecha:** 2026-07-19
 **Documento complementario de:** PAC — Segunda Iteración, Plan de Pruebas (ISO/IEC/IEEE 29119-3)
 **Alcance:** Backend del Sistema de Gestión Bibliotecaria (`github.com/Sgontardo/gestion-bibliotecaria`)
@@ -10,7 +10,7 @@
 
 ## 1. Propósito y alcance
 
-Este informe documenta la auditoría de cumplimiento de seguridad realizada sobre el backend del Sistema de Gestión Bibliotecaria, cerrando el ciclo de Verificación de la Segunda Iteración (PAC, §2.2). A diferencia del Informe de Pruebas —que reporta *qué se probó y con qué resultado*— este informe responde a una pregunta distinta: **¿el sistema, en su estado actual, cumple con los marcos normativos que el equipo se comprometió a seguir, y qué grado de confianza puede depositar un tercero en esa afirmación?**
+Este informe documenta la auditoría de cumplimiento de seguridad realizada sobre el backend del Sistema de Gestión Bibliotecaria, cerrando el ciclo de Verificación de la Segunda Iteración. A diferencia del Informe de Pruebas —que reporta *qué se probó y con qué resultado*— este informe responde a una pregunta distinta: **¿el sistema, en su estado actual, cumple con los marcos normativos que el equipo se comprometió a seguir, y qué grado de confianza puede depositar un tercero en esa afirmación?**
 
 El alcance se limita a la característica de **Seguridad** de ISO/IEC 25010 (Confidencialidad, Integridad, Autenticidad) sobre el backend. No cubre la característica de Adecuación Funcional auditada en la Primera Iteración (ERS/DAS), ni aspectos de infraestructura de despliegue fuera del código de la aplicación.
 
@@ -60,7 +60,7 @@ Se diseñó un único instrumento — la **Matriz de Verificación de Controles 
 
 ### 3.2 Naturaleza del instrumento: checklist ejecutable, no checklist estático
 
-A diferencia de la lista de chequeo de la Primera Iteración (PAC v1.0, §9.2 — aplicada manualmente sobre documentos ERS/DAS), este instrumento tiene una propiedad distinta: **cada fila es verificable de forma automática y repetible**, porque el campo "Evidencia" enlaza a una prueba de código que se ejecuta en cada `push`. Esto convierte al instrumento en autoactualizable — su resultado no depende de que un humano lo vuelva a aplicar manualmente en la próxima auditoría, sino de que la suite de pruebas siga corriendo en CI.
+A diferencia de la lista de chequeo de la Primera Iteración (PAC v1.0, Sección 9.2 — aplicada manualmente sobre documentos ERS/DAS), este instrumento tiene una propiedad distinta: **cada fila es verificable de forma automática y repetible**, porque el campo "Evidencia" enlaza a una prueba de código que se ejecuta en cada `push`. Esto convierte al instrumento en autoactualizable — su resultado no depende de que un humano lo vuelva a aplicar manualmente en la próxima auditoría, sino de que la suite de pruebas siga corriendo en CI.
 
 ### 3.3 Aplicación del instrumento
 
