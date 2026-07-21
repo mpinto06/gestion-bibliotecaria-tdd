@@ -436,6 +436,36 @@ def http_request(url, method="GET", headers=None, data=None):
 CONFLUENCE_FRAGMENT_START = "<!-- CI-METRICS-START -->"
 CONFLUENCE_FRAGMENT_END = "<!-- CI-METRICS-END -->"
 
+# Explanatory notes rendered inside the report. They exist because the raw
+# numbers were being misread: "casos ejecutados", "hallazgos unicos" and
+# "casos especificados en el Plan de Pruebas" are three different units and
+# do not have to match each other.
+READING_NOTE_HTML = (
+    "<h3>Como leer este informe</h3>"
+    "<p>Las cifras de este informe usan <strong>tres unidades distintas</strong>, "
+    "que no son comparables entre si:</p>"
+    "<ul>"
+    "<li><strong>Casos de prueba ejecutados</strong> (tablas de resultados): cada "
+    "metodo JUnit ejecutado. Un <em>@ParameterizedTest</em> con N valores cuenta "
+    "como N casos, no como uno.</li>"
+    "<li><strong>Hallazgos unicos</strong> (tablas de densidad y distribucion): "
+    "defectos de seguridad distintos. Un mismo hallazgo puede estar cubierto por "
+    "varios casos de prueba en niveles diferentes (unitario, integracion y caja "
+    "negra), por lo que hay mas casos ejecutados que hallazgos.</li>"
+    "<li><strong>Casos especificados en el Plan de Pruebas</strong> (documento "
+    "aparte): subconjunto priorizado por riesgo para un ciclo concreto. Su "
+    "numeracion (H-xx / CB-xx / CN-xx) es independiente de la usada aqui.</li>"
+    "</ul>"
+)
+
+CATEGORY_NOTE_HTML = (
+    "<p><em>Nota:</em> la suma de las tres categorias es una unidad menor que el "
+    "total general. La diferencia corresponde a la prueba de arranque del contexto "
+    "de Spring (<em>GestionBibliotecariaApplicationTests</em>), que se excluye a "
+    "proposito de la taxonomia unitaria / integracion / caja negra por no "
+    "pertenecer a ninguna de las tres.</p>"
+)
+
 
 def _category_summary_table_html(title, cat_summary):
     rate = pass_rate(cat_summary)
@@ -522,6 +552,12 @@ def build_confluence_fragment_html(
             "</tbody></table>"
             f"<p>Densidad global = {len(SECURITY_FINDINGS)} hallazgos &divide; {len(COMPONENTS)} "
             f"componentes = {global_density}</p>"
+            "<p><em>Nota:</em> este catalogo de hallazgos se derivo de los defectos "
+            "documentados en el codigo de pruebas de este repositorio. Es un catalogo "
+            "distinto del que usa el Plan de Pruebas de Seguridad (numeracion H-xx), "
+            "que recorta por riesgo un subconjunto para un ciclo especifico. Ambos "
+            "describen el mismo sistema pero no tienen por que coincidir en cantidad; "
+            "la trazabilidad entre ambos esta pendiente.</p>"
         )
 
     distribution_html = ""
@@ -536,6 +572,12 @@ def build_confluence_fragment_html(
             "<tr><th>Subcaracteristica</th><th>Hallazgos</th><th>% del total</th></tr>"
             f"{rows_html}"
             "</tbody></table>"
+            f"<p><em>Nota:</em> los porcentajes suman mas de 100% y los hallazgos "
+            f"suman mas de {len(SECURITY_FINDINGS)} porque hay hallazgos que afectan "
+            "a dos subcaracteristicas a la vez (por ejemplo, un fallo de control de "
+            "acceso que compromete Integridad y Autenticidad simultaneamente). Se "
+            "contabilizan en ambas categorias en lugar de forzar una clasificacion "
+            "unica que seria menos precisa.</p>"
         )
 
     return (
@@ -543,6 +585,8 @@ def build_confluence_fragment_html(
         f"<p><strong>Timestamp:</strong> {meta['timestamp']}<br/>"
         f"<strong>Commit:</strong> {meta['commit_short']}<br/>"
         f"<strong>Run:</strong> <a href=\"{meta['run_url']}\">{meta['run_url']}</a></p>"
+        f"{READING_NOTE_HTML}"
+        "<h3>Resumen general</h3>"
         "<table><tbody>"
         "<tr><th>Total</th><th>Passed</th><th>Failed</th><th>Errors</th>"
         "<th>Skipped</th><th>Pass rate</th></tr>"
@@ -551,6 +595,7 @@ def build_confluence_fragment_html(
         f"<td>{summary['skipped']}</td><td>{rate}%</td></tr>"
         "</tbody></table>"
         f"{category_html}"
+        f"{CATEGORY_NOTE_HTML}"
         "<h3>Code coverage</h3>"
         "<table><tbody>"
         "<tr><th>Line coverage</th><th>Branch coverage</th></tr>"
