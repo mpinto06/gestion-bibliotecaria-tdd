@@ -42,3 +42,14 @@
 - Consider generating `SECURITY_FINDINGS`/`COMPONENTS` from a shared source (e.g. a YAML file) instead of Python literals, so non-engineers can update the catalog.
 - Consider having the CI workflow run `mvn -B clean test` instead of `mvn -B test` to avoid stale Surefire reports across cached `target/` directories.
 - Still no automated tests for `publish_metrics.py` itself; verification remains manual (`--dry-run` flag added this session, exercised against real local Surefire/JaCoCo output).
+
+## [2026-07-20] Remediado hallazgo de Confidencialidad: hash de contraseña expuesto en JSON
+
+**Risks**
+- `Usuario.contrasena` ahora lleva `@JsonProperty(access = WRITE_ONLY)`: se deserializa en registro/login pero nunca se serializa en respuestas. Fix real (no debilitación de test) que hace pasar los 2 tests de serialización de Confidencialidad; failures 42 -> 40, pass rate 65.6% -> 67.2%.
+- El catálogo `SECURITY_FINDINGS` en `publish_metrics.py` sigue hardcodeado en 20 hallazgos; este fix NO se refleja automáticamente en las tablas de densidad/distribución, solo en las de resultados y en la Tasa de Confirmación de Controles.
+- Verificar que ningún flujo dependa de recibir `contrasena` DE VUELTA en un cuerpo JSON de respuesta (login y /usuarios/me ya la anulaban a mano, así que no hay regresión).
+
+**Technical debt / follow-ups**
+- Quedan los otros 2 hallazgos de Confidencialidad (validación de fortaleza de contraseña en registro y cambio) sin remediar; requieren lógica de validación, no solo una anotación.
+- Actualizar manualmente el catálogo de hallazgos si se decide reflejar remediaciones en densidad/distribución.

@@ -1,5 +1,7 @@
 package com.biblioteca.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +18,10 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String correo;
 
+    // Accepts the password on input (registration/login) but never serializes it
+    // back into API responses -- prevents leaking the BCrypt hash. Fixes the
+    // confidentiality finding covered by ModelSerializationTest.
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String contrasena;
 
