@@ -140,7 +140,7 @@ class BeanValidationRequestBodyIntegrationTest {
     }
 
     // Doble: STUB de comentarioResenaService.save.
-    // Verifica: ASVS V5.1.3
+    // Ignorado: ASVS V5.1.3
     // DEFECTO DETECTADO: mismo patrón que ResenaRequest, aplicado a ComentarioResenaRequest.
     @ParameterizedTest(name = "payload de comentario inválido #{index}")
     @ValueSource(strings = {
